@@ -29,7 +29,8 @@ public:
 	void Draw();
 
 private:
-	
+	SDL_Window* window;
+	SDL_Renderer* ren;
 	Entity Player;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
