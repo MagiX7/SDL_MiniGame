@@ -12,7 +12,7 @@
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
-#define MAX_KEYS		256
+#define MAX_KEYS 256
 
 
 class Game
