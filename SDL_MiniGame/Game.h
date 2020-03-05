@@ -9,3 +9,29 @@
 #pragma comment(lib, "SDL_Mixer/libx86/SDL2_mixer.lib")
 
 #include "Entity.h"
+
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+#define MAX_KEYS		256
+
+
+class Game
+{
+public:
+	Game();
+	~Game();
+
+	bool Init();
+	void Release();
+
+	bool Input();
+	bool Update();
+	void Draw();
+
+private:
+	
+	Entity Player;
+
+	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
+	KEY_STATE keys[MAX_KEYS];
+};
