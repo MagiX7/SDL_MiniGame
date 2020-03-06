@@ -32,11 +32,12 @@ public:
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	Entity Player, Water;
+	Entity Player, Water, Brick;
 
 	SDL_Texture* background;
-	SDL_Texture* player;
+	SDL_Texture* player_img;
 	SDL_Texture* water_img;
+	SDL_Texture* brick_img;
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];
 };

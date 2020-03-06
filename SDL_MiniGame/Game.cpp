@@ -34,11 +34,14 @@ bool Game::Init()
 	}
 	//Initialize Textures
 	IMG_Init(IMG_INIT_PNG);
+	player_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("Player.png"));
 	water_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("Water.png"));
+	brick_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("brickStack.png"));
 
 	//Initialize variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 150, 100, 3);
-	Water.Init(0, WINDOW_HEIGHT - 40 , WINDOW_WIDTH, 40, 0);
+	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 50, 3); //Initialize Player position, and size.
+	Water.Init(0, WINDOW_HEIGHT - 40 , WINDOW_WIDTH, 40, 0); //Initialize water position, and size.
+	Brick.Init(720, WINDOW_HEIGHT - 200, 300, 33, 0); //Initialize brick position, and size.
 
 	return true;
 }
@@ -46,7 +49,8 @@ bool Game::Init()
 void Game::Release() 
 {
 	SDL_DestroyTexture(water_img);
-	SDL_DestroyTexture(player);
+	SDL_DestroyTexture(brick_img);
+	SDL_DestroyTexture(player_img);
 	SDL_DestroyTexture(background);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
@@ -88,6 +92,14 @@ void Game::Draw()
 	//Print background black color
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
+
+	//Print player texture
+	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	SDL_RenderCopy(renderer,player_img, NULL, &rc);
+
+	//Print Brick texture
+	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	SDL_RenderCopy(renderer, brick_img, NULL, &rc);
 
 	//Print rectangle foreground for the water below
 	Water.GetRect(&rc.x,&rc.y,&rc.w,&rc.h); //We get the rectangle stadistics for the water
