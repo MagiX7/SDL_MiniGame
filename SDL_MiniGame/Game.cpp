@@ -32,17 +32,19 @@ bool Game::Init()
 	{
 		keys[i] = KEY_IDLE;
 	}
+
+	//Initialize variables
+	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 50, 3); //Initialize Player position, and size.
+	Water.Init(0, WINDOW_HEIGHT - 40, WINDOW_WIDTH, 40, 0); //Initialize water position, and size.
+	Brick.Init(720, WINDOW_HEIGHT - 200, 300, 33, 0); //Initialize brick position, and size.
+
 	//Initialize Textures
 	IMG_Init(IMG_INIT_PNG);
 	player_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("Player.png"));
 	water_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("Water.png"));
 	brick_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("brickStack.png"));
 
-	//Initialize variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 50, 3); //Initialize Player position, and size.
-	Water.Init(0, WINDOW_HEIGHT - 40 , WINDOW_WIDTH, 40, 0); //Initialize water position, and size.
-	Brick.Init(720, WINDOW_HEIGHT - 200, 300, 33, 0); //Initialize brick position, and size.
-
+	
 	return true;
 }
 
@@ -52,22 +54,25 @@ void Game::Release()
 	SDL_DestroyTexture(brick_img);
 	SDL_DestroyTexture(player_img);
 	SDL_DestroyTexture(background);
-	SDL_DestroyRenderer(renderer);
+
 	SDL_DestroyWindow(window);
+
 	SDL_Quit();
 }
 
+
 bool Game::Input()
 {
+	
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
 	{
-		if (event.type == SDL_QUIT) return false;
+		if (event.type == SDL_QUIT)	return false;
 	}
 
 	SDL_PumpEvents();
 	const Uint8* keyboard = SDL_GetKeyboardState(NULL);
-	for (int i = 0; i < MAX_KEYS; i++)
+	for (int i = 0; i < MAX_KEYS; ++i)
 	{
 		if (keyboard[i])
 			keys[i] = (keys[i] == KEY_IDLE) ? KEY_DOWN : KEY_REPEAT;
@@ -80,9 +85,17 @@ bool Game::Input()
 
 bool Game::Update()
 {
-	//Update keyboard input
-
-	return true;
+	if (!Input()) return true;
+	//Process Input
+	int fx = 0, fy = 0;
+	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
+	if (keys[SDL_SCANCODE_W] == KEY_REPEAT)	fy = -1;
+	if (keys[SDL_SCANCODE_S] == KEY_REPEAT)	fy = 1;
+	if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
+	if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
+	Player.Move(fx, fy);
+	
+	return false;
 }
 
 void Game::Draw()
@@ -97,6 +110,8 @@ void Game::Draw()
 	//Print player texture
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(renderer, player_img, NULL, &rc);
+	
+
 
 	//Print Bricks texture
 	Brick.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
@@ -116,5 +131,5 @@ void Game::Draw()
 
 	//Show everything on window
 	SDL_RenderPresent(renderer);
-	SDL_Delay(5000);
+	SDL_Delay(10);
 }
