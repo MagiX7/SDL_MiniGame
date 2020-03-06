@@ -70,6 +70,7 @@ bool Game::Input()
 
 bool Game::Update()
 {
+	//Update keyboard input
 
 	return true;
 }
