@@ -13,10 +13,13 @@ public:
 	void Move(int dx);
 	int  GetWidth();
 	void Jump(int dy);
+	bool IsGrounded();
+	bool grounded;
 
 private:
 	int x = 0, y = 0;
 	int width, height;
 	int speedX, speedY;
 	bool is_alive;
+	//bool grounded;
 };

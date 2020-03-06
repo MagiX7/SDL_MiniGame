@@ -1,5 +1,6 @@
 #include "Entity.h"
-
+#include <math.h>
+#define PI 3.1415926535897932384626433832795
 
 Entity::Entity()
 {
@@ -18,6 +19,7 @@ void Entity::Init(int posx, int posy, int w, int h, int sx, int sy)
 	height = h;
 	speedX = sx;
 	is_alive = true;
+	grounded = true;
 }
 
 void Entity::GetRect(int* posx, int* posy, int* w, int* h) 
@@ -61,5 +63,19 @@ int Entity::GetWidth()
 
 void Entity::Jump(int dy)
 {
-	y -= dy*speedY;
+	if (!grounded)
+	{
+		float alpha = 0;
+		alpha += dy * (PI / 180.0f);
+		while (alpha < 180)
+		{
+			y -= 20 * cos(alpha);
+			alpha++;
+		}
+	}
+}
+
+bool Entity::IsGrounded()
+{
+	return grounded;
 }
