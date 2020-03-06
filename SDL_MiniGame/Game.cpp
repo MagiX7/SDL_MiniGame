@@ -34,9 +34,9 @@ bool Game::Init()
 	}
 
 	//Initialize variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 50, 3); //Initialize Player position, and size.
-	Water.Init(0, WINDOW_HEIGHT - 40, WINDOW_WIDTH, 40, 0); //Initialize water position, and size.
-	Brick.Init(720, WINDOW_HEIGHT - 200, 300, 33, 0); //Initialize brick position, and size.
+	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 50, 3, 5); //Initialize Player position, and size.
+	Water.Init(0, WINDOW_HEIGHT - 40, WINDOW_WIDTH, 40, 0, 0); //Initialize water position, and size.
+	Brick.Init(720, WINDOW_HEIGHT - 200, 300, 33, 0, 0); //Initialize brick position, and size.
 
 	//Initialize Textures
 	IMG_Init(IMG_INIT_PNG);
@@ -89,11 +89,12 @@ bool Game::Update()
 	//Process Input
 	int fx = 0, fy = 0;
 	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
-	if (keys[SDL_SCANCODE_W] == KEY_REPEAT)	fy = -1;
-	if (keys[SDL_SCANCODE_S] == KEY_REPEAT)	fy = 1;
 	if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
 	if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
-	Player.Move(fx, fy);
+	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN) fy = 1;
+	
+	Player.Jump(fy);
+	Player.Move(fx);
 	
 	return false;
 }
@@ -124,11 +125,6 @@ void Game::Draw()
 	//SDL_RenderFillRect(renderer, &rc);
 	SDL_RenderCopy(renderer, water_img, NULL, &rc);
 	
-	//SDL_RenderDrawRect(renderer, &rc);
-	
-	
-
-
 	//Show everything on window
 	SDL_RenderPresent(renderer);
 	SDL_Delay(10);

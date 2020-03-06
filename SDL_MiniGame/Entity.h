@@ -4,18 +4,19 @@ public:
 	Entity();
 	~Entity();
 
-	void Init(int posx, int posy, int w, int h, int s);
+	void Init(int posx, int posy, int w, int h, int sx, int sy);
 	void GetRect(int* posx, int* posy, int* w, int* h);
 	int  GetX();
 	int  SetX(int posx);
 	void ShutDown();
 	bool IsAlive();
-	void Move(int dx, int dy);
+	void Move(int dx);
 	int  GetWidth();
+	void Jump(int dy);
 
 private:
 	int x = 0, y = 0;
 	int width, height;
-	int speed;
+	int speedX, speedY;
 	bool is_alive;
 };

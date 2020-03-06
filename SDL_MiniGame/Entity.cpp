@@ -10,13 +10,13 @@ Entity::~Entity()
 {
 }
 
-void Entity::Init(int posx, int posy, int w, int h, int s) 
+void Entity::Init(int posx, int posy, int w, int h, int sx, int sy) 
 {
 	x = posx;
 	y = posy;
 	width = w;
 	height = h;
-	speed = s;
+	speedX = sx;
 	is_alive = true;
 }
 
@@ -49,13 +49,17 @@ bool Entity::IsAlive()
 	return is_alive;
 }
 
-void Entity::Move(int dx, int dy) 
+void Entity::Move(int dx) 
 {
-	x += dx * speed;
-	y += dy * speed;
+	x += dx * speedX;
 }
 
 int Entity::GetWidth()
 {
 	return width;
+}
+
+void Entity::Jump(int dy)
+{
+	y -= dy*speedY;
 }
