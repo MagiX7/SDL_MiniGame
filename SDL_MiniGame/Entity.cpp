@@ -15,7 +15,7 @@ void Entity::Init(int posx, int posy, int w, int h, int s)
 	x = posx;
 	y = posy;
 	width = w;
-	heigth = h;
+	height = h;
 	speed = s;
 	is_alive = true;
 }
@@ -25,7 +25,7 @@ void Entity::GetRect(int* posx, int* posy, int* w, int* h)
 	*posx = x;
 	*posy = y;
 	*w = width;
-	*h = heigth;
+	*h = height;
 }
 
 int Entity::GetX()

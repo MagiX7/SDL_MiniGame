@@ -14,8 +14,8 @@ public:
 	int  GetWidth();
 
 private:
-	int x = 0, y = 0;
-	int width, heigth;
+	int x, y;
+	int width, height;
 	int speed;
 	bool is_alive;
 };

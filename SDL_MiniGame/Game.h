@@ -31,8 +31,8 @@ public:
 
 private:
 	SDL_Window* window;
-	SDL_Renderer* ren;
-	Entity Player;
+	SDL_Renderer* renderer;
+	Entity Player, Water;
 
 	SDL_Texture* background;
 	SDL_Texture* player;

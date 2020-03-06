@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Entity.h"
 #include <math.h>
 
 
@@ -19,8 +20,8 @@ bool Game::Init()
 	}
 
 	//Create a Render
-	ren = SDL_CreateRenderer(window, -1, 0);
-	if (ren == NULL)
+	renderer = SDL_CreateRenderer(window, -1, 0);
+	if (renderer == NULL)
 	{
 		SDL_Log("Unable to create the render: %s", SDL_GetError());
 		return false;
@@ -34,6 +35,7 @@ bool Game::Init()
 
 	//Initailize variables
 	Player.Init(20, WINDOW_HEIGHT >> 1, 150, 100, 3);
+	Water.Init(20, WINDOW_HEIGHT >> 1, 150, 100, 3);
 
 	return true;
 }
@@ -42,7 +44,7 @@ void Game::Release()
 {
 	SDL_DestroyTexture(player);
 	SDL_DestroyTexture(background);
-	SDL_DestroyRenderer(ren);
+	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
@@ -77,9 +79,21 @@ bool Game::Update()
 
 void Game::Draw()
 {
+	SDL_Rect rc;
+
+	//Print background black color
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+
+	//Print rectangle foreground for the water below
+	Water.GetRect(&rc.x,&rc.y,&rc.w,&rc.h); //We get the rectangle stadistics for the water
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	//SDL_RenderDrawRect(renderer, &rc);
+	SDL_RenderFillRect(renderer, &rc);
+	
 
 
 	//Show everything on window
-	SDL_RenderPresent(ren);
+	SDL_RenderPresent(renderer);
 	SDL_Delay(1000);
 }
