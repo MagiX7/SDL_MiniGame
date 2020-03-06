@@ -70,6 +70,7 @@ void Entity::Jump(int dy)
 {
 	if (!grounded)
 	{
+
 		float h = 0;
 		float g = 2;
 		
