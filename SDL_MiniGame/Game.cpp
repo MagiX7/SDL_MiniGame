@@ -40,6 +40,10 @@ bool Game::Init()
 
 void Game::Release() 
 {
+	SDL_DestroyTexture(player);
+	SDL_DestroyTexture(background);
+	SDL_DestroyRenderer(ren);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
@@ -66,10 +70,15 @@ bool Game::Input()
 
 bool Game::Update()
 {
+
 	return true;
 }
 
 void Game::Draw()
 {
 
+
+	//Show everything on window
+	SDL_RenderPresent(ren);
+	SDL_Delay(1000);
 }
