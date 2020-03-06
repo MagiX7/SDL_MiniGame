@@ -1,68 +1,47 @@
 #include "Game.h"
-#include "Entity.h"
 #include <math.h>
 
+Game::Game() {}
+Game::~Game() {}
 
 bool Game::Init()
 {
 	//Initialize SDL with all subsystems
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
-	//Create window
-	window = SDL_CreateWindow("Mini Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-	if (window == NULL)
+	//Create our window: title, x, y, w, h, flags
+	Window = SDL_CreateWindow("Spaceship: arrow keys + space", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	if (Window == NULL)
 	{
 		SDL_Log("Unable to create window: %s", SDL_GetError());
 		return false;
 	}
-
-	//Create a Render
-	renderer = SDL_CreateRenderer(window, -1, 0);
-	if (renderer == NULL)
+	//Create a 2D rendering context for a window: window, device index, flags
+	Renderer = SDL_CreateRenderer(Window, -1, 0);
+	if (Renderer == NULL)
 	{
-		SDL_Log("Unable to create the render: %s", SDL_GetError());
+		SDL_Log("Unable to create rendering context: %s", SDL_GetError());
 		return false;
 	}
-
-	//Initialize the keys
+	//Initialize keys array
 	for (int i = 0; i < MAX_KEYS; ++i)
-	{
 		keys[i] = KEY_IDLE;
-	}
 
-	//Initialize variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 50, 3, 0); //Initialize Player position, and size.
-	Water.Init(0, WINDOW_HEIGHT - 40, WINDOW_WIDTH, 40, 0, 0); //Initialize water position, and size.
-	Brick.Init(720, WINDOW_HEIGHT - 200, 300, 33, 0, 0); //Initialize brick position, and size.
-
-	//Initialize Textures
-	IMG_Init(IMG_INIT_PNG);
-	player_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("Player.png"));
-	water_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("Water.png"));
-	brick_img = SDL_CreateTextureFromSurface(renderer, IMG_Load("brickStack.png"));
+	//Init variables
+	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 20, 5);
+	idx_shot = 0;
 
 	return true;
 }
-
-void Game::Release() 
+void Game::Release()
 {
-	SDL_DestroyTexture(water_img);
-	SDL_DestroyTexture(brick_img);
-	SDL_DestroyTexture(player_img);
-	SDL_DestroyTexture(background);
-
-	SDL_DestroyWindow(window);
-
+	//Clean up all SDL initialized subsystems
 	SDL_Quit();
 }
-
-
 bool Game::Input()
 {
-	
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
 	{
@@ -81,56 +60,68 @@ bool Game::Input()
 
 	return true;
 }
-
 bool Game::Update()
 {
-	if (!Input()) return true;
+	//Read Input
+	if (!Input())	return true;
+
 	//Process Input
 	int fx = 0, fy = 0;
 	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
+	if (keys[SDL_SCANCODE_W] == KEY_REPEAT)	fy = -1;
+	if (keys[SDL_SCANCODE_S] == KEY_REPEAT)	fy = 1;
 	if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
 	if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
-	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN) SDL_Quit();
 	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
 	{
-		Player.grounded = false;
-		Player.getSpeedY(1);
-		fy = -1;
+		int x, y, w, h;
+		Player.GetRect(&x, &y, &w, &h);
+		Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 20, 10, 10);
+		idx_shot++;
+		idx_shot %= MAX_SHOTS;
 	}
-	
-	Player.Jump(fy);
-	Player.Move(fx);
-	
+
+	//Logic
+	//Player update
+	Player.Move(fx, fy);
+	//Shots update
+	for (int i = 0; i < MAX_SHOTS; ++i)
+	{
+		if (Shots[i].IsAlive())
+		{
+			Shots[i].Move(1, 0);
+			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
+		}
+	}
+
 	return false;
 }
-
 void Game::Draw()
 {
+	//Set the color used for drawing operations
+	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
+	//Clear rendering target
+	SDL_RenderClear(Renderer);
+
+	//Draw player
 	SDL_Rect rc;
-
-	//Print background black color
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-
-	
-	//Print player texture
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_RenderCopy(renderer, player_img, NULL, &rc);
-	
+	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
+	SDL_RenderFillRect(Renderer, &rc);
 
+	//Draw shots
+	SDL_SetRenderDrawColor(Renderer, 192, 0, 0, 255);
+	for (int i = 0; i < MAX_SHOTS; ++i)
+	{
+		if (Shots[i].IsAlive())
+		{
+			Shots[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
 
-	//Print Bricks texture
-	Brick.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_RenderCopy(renderer, brick_img, NULL, &rc);
-	
+	//Update screen
+	SDL_RenderPresent(Renderer);
 
-	//Print rectangle foreground for the water below
-	Water.GetRect(&rc.x,&rc.y,&rc.w,&rc.h); //We get the rectangle stadistics for the water
-	SDL_SetRenderDrawColor(renderer, 97, 170, 255, 255);
-	//SDL_RenderFillRect(renderer, &rc);
-	SDL_RenderCopy(renderer, water_img, NULL, &rc);
-	
-	//Show everything on window
-	SDL_RenderPresent(renderer);
-	SDL_Delay(10);
+	SDL_Delay(10);	// 1000/10 = 100 fps max
 }

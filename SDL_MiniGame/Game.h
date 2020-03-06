@@ -13,14 +13,15 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 #define MAX_KEYS 256
+#define MAX_SHOTS		32
 
 
 class Game
 {
 public:
+	Game();
+	~Game();
 
-	Game() {};
-	~Game() {};
 	bool Init();
 	void Release();
 
@@ -28,16 +29,12 @@ public:
 	bool Update();
 	void Draw();
 
-
 private:
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	Entity Player, Water, Brick;
+	SDL_Window* Window;
+	SDL_Renderer* Renderer;
 
-	SDL_Texture* background;
-	SDL_Texture* player_img;
-	SDL_Texture* water_img;
-	SDL_Texture* brick_img;
+	Entity Player, Shots[MAX_SHOTS];
+	int idx_shot;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];

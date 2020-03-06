@@ -1,28 +1,20 @@
 #pragma once
-class Entity {
+class Entity
+{
 public:
 	Entity();
 	~Entity();
 
-	void Init(int posx, int posy, int w, int h, int sx, int sy);
+	void Init(int posx, int posy, int w, int h, int s);
 	void GetRect(int* posx, int* posy, int* w, int* h);
 	int  GetX();
-	int  SetX(int posx);
 	void ShutDown();
 	bool IsAlive();
-	void Move(int dx);
-	int  GetWidth();
-	void Jump(int dy);
-	bool IsGrounded();
-	int getSpeedY(int sy);
-
-	bool grounded;
-
+	void Move(int dx, int dy);
 
 private:
-	int x = 0, y = 0;
+	int x, y;
 	int width, height;
-	int speedX, speedY;
+	int speed;
 	bool is_alive;
-	//bool grounded;
 };
