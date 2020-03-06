@@ -14,7 +14,10 @@ public:
 	int  GetWidth();
 	void Jump(int dy);
 	bool IsGrounded();
+	int getSpeedY(int sy);
+
 	bool grounded;
+
 
 private:
 	int x = 0, y = 0;

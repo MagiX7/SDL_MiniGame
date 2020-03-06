@@ -61,18 +61,40 @@ int Entity::GetWidth()
 	return width;
 }
 
+int Entity::getSpeedY(int sy)
+{
+	return speedY;
+}
+
 void Entity::Jump(int dy)
 {
 	if (!grounded)
 	{
-		float alpha = 0;
-		alpha += dy * (PI / 180.0f);
-		while (alpha < 180)
+		int h = 0;
+		int g = 2;
+		
+		
+		while (h < 2)
 		{
-			y -= 20 * cos(alpha);
-			alpha++;
+			y -= speedY;
+			speedY -= g;
+			h++;
 		}
+
+		if (h == 2)
+		{
+			speedY = 0;
+		}
+
+		while (h > 2)
+		{
+			y += speedY;
+			speedY += -g;
+			h--;
+		}
+		
 	}
+	!grounded;
 }
 
 bool Entity::IsGrounded()

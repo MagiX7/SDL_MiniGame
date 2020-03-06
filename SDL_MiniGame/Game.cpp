@@ -90,9 +90,12 @@ bool Game::Update()
 	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
 	if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
 	if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
+	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN) SDL_Quit();
 	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
 	{
 		Player.grounded = false;
+		Player.getSpeedY(3);
+		fy = -1;
 	}
 	
 	Player.Jump(fy);
