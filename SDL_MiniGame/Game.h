@@ -18,15 +18,16 @@
 class Game
 {
 public:
-	Game();
-	~Game();
 
+	Game() {};
+	~Game() {};
 	bool Init();
 	void Release();
 
 	bool Input();
 	bool Update();
 	void Draw();
+
 
 private:
 	SDL_Window* window;
