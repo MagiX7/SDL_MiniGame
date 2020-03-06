@@ -94,7 +94,7 @@ bool Game::Update()
 	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
 	{
 		Player.grounded = false;
-		Player.getSpeedY(3);
+		Player.getSpeedY(1);
 		fy = -1;
 	}
 	

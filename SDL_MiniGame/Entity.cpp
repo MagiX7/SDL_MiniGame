@@ -70,13 +70,13 @@ void Entity::Jump(int dy)
 {
 	if (!grounded)
 	{
-		int h = 0;
-		int g = 2;
+		float h = 0;
+		float g = 2;
 		
 		
 		while (h < 2)
 		{
-			y -= speedY;
+			y += speedY;
 			speedY -= g;
 			h++;
 		}
@@ -84,17 +84,16 @@ void Entity::Jump(int dy)
 		if (h == 2)
 		{
 			speedY = 0;
+			h--;
 		}
-
 		while (h > 2)
 		{
 			y += speedY;
-			speedY += -g;
+			speedY += g;
 			h--;
 		}
-		
+		if (h == 0) !grounded;
 	}
-	!grounded;
 }
 
 bool Entity::IsGrounded()
