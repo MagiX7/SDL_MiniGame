@@ -93,13 +93,15 @@ void Game::Draw()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 
+	
 	//Print player texture
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_RenderCopy(renderer,player_img, NULL, &rc);
+	SDL_RenderCopy(renderer, player_img, NULL, &rc);
 
-	//Print Brick texture
-	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	//Print Bricks texture
+	Brick.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(renderer, brick_img, NULL, &rc);
+	
 
 	//Print rectangle foreground for the water below
 	Water.GetRect(&rc.x,&rc.y,&rc.w,&rc.h); //We get the rectangle stadistics for the water
