@@ -88,8 +88,7 @@ bool Game::Update()
 
 	int frame_start = SDL_GetTicks() / 100;
 
-
-	if (frame_start % 20 == 0)
+	if (frame_start % 5 == 0)
 	{
 		int x, y, w, h;
 
