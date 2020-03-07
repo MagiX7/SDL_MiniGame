@@ -8,9 +8,9 @@ public:
 	void Init(int posx, int posy, int w, int h, int s);
 	void GetRect(int* posx, int* posy, int* w, int* h);
 	int  GetX();
-	int GetY();
-	int GetRight();
-	int GetTop();
+	int  GetY();
+	int  GetRight();
+	int  GetTop();
 	void ShutDown();
 	bool IsAlive();
 	void Move(int dx, int dy);

@@ -97,7 +97,7 @@ bool Game::Update()
 
 		Enemies->GetRect(&x, &y, &w, &h);
 		y = rand() % WINDOW_HEIGHT;
-		Enemies[idx_enemies].Init(WINDOW_WIDTH - 20, y, 20, 10, 2);
+		Enemies[idx_enemies].Init(WINDOW_WIDTH - 20, y, 40, 25, 2);
 		idx_enemies++;
 		idx_enemies %= AMOUNT_OF_ENEMIES;
 	}
@@ -105,14 +105,12 @@ bool Game::Update()
 	//Logic
 	//Enemies update
 
-
-
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
 	{
 
 		if (Enemies[i].IsAlive())
 		{
-			Enemies[i].Move(-2, 0);
+			Enemies[i].Move(-3, 0);
 			if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
 		}
 
@@ -138,12 +136,15 @@ bool Game::Update()
 
 		if (Player.GetRight() >= Enemies[i].GetX() && Player.GetRight() <= Enemies[i].GetRight() && Player.GetY() >= Enemies[i].GetY() && Player.GetY() <= Enemies[i].GetTop() && Player.GetTop() >= Enemies[i].GetTop()) 
 		{
+			SDL_Delay(500);
 			Release();
 		}
 
 		else if (Player.GetRight() >= Enemies[i].GetX() && Player.GetRight() <= Enemies[i].GetRight() && Player.GetY() <= Enemies[i].GetY() && Player.GetTop() >= Enemies[i].GetY() && Player.GetTop() <= Enemies[i].GetTop())
 		{
+			SDL_Delay(500);
 			Release();
+
 		}
 
 	}
@@ -159,7 +160,6 @@ bool Game::Update()
 			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
 		}
 	}
-
 
 	return false;
 }

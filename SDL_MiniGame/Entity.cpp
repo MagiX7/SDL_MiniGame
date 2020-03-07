@@ -42,6 +42,7 @@ int Entity::GetTop()
 	int y2 = y + height;
 	return y2;
 }
+
 void Entity::ShutDown()
 {
 	is_alive = false;
