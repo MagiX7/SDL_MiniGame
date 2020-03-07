@@ -3,7 +3,6 @@
 #include <math.h>
 #include <time.h>
 
-
 Game::Game() {}
 Game::~Game() {}
 
@@ -35,8 +34,6 @@ bool Game::Init()
 	//Init variables
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 20, 5);
 	idx_shot = 0;
-	idx_enemies = 0;
-	//Enemies->Init(WINDOW_WIDTH - 50, WINDOW_HEIGHT >> 1, 30, 10, 2); DE MOMENTO NO
 
 	srand(time(NULL));
 
@@ -91,17 +88,17 @@ bool Game::Update()
 
 	//Esto nos permite conseguir el tiempo en frames desde que se inicia el juego
 	//Lo dividimos entre 100 para que en vez de milesimas, sea un poco mas
-	int frame_start = SDL_GetTicks() / 10;
+	int frame_start = SDL_GetTicks() / 100;
 
 
-	if (frame_start % 100 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
+	if (frame_start % 10 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
 	{
 		int x, y, w, h;
-		int pos_x = WINDOW_WIDTH;
-		int pos_y = rand() % WINDOW_HEIGHT;
-
-		Enemies[idx_enemies].Init(pos_x, pos_y, 20, 10, 2);
-		Enemies[idx_enemies].GetRect(&x, &y, &w, &h);
+		
+		Enemies->GetRect(&x, &y, &w, &h);
+		//int pos_x = WINDOW_WIDTH - 20;
+		y = rand() % WINDOW_HEIGHT;
+		Enemies[idx_enemies].Init(WINDOW_WIDTH - 20, y, 20, 10, 2);
 		idx_enemies++;
 		idx_enemies %= AMOUNT_OF_ENEMIES;
 
@@ -118,41 +115,43 @@ bool Game::Update()
 		if (Enemies[i].IsAlive())
 		{
 			Enemies[i].Move(-2, 0);
-			//MIRAR A PARTIR DE AQUÍ!!!!!!!!!!!!!!!!! ENTREGA ENTREGA ENTREGA
-		//	if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
+			if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
 		}
-		/*
+		
 		for (int j = 0; j < MAX_SHOTS; j++)
 		{
+				if (Shots[j].GetRight() >= Enemies[i].GetX())
+				{
+					if (Shots[j].GetY() <= Enemies[i].GetY() && Shots[j].GetTop() >= Enemies[i].GetY() && Shots[j].GetTop() <= Enemies[i].GetTop()) {
+						Shots[j].ShutDown();
+						Enemies[i].ShutDown();
+					}
+					if (Shots[j].GetY() >= Enemies[i].GetY() && Shots[j].GetY() <= Enemies[i].GetTop() && Shots[j].GetTop() >= Enemies[i].GetTop())
+					{
+						Shots[j].ShutDown();
+						Enemies[i].ShutDown();
+					}
+				}
 
-			if (Shots[j].GetRight() >= Enemies[i].GetX() && Shots[j].GetY() <= Enemies[i].GetY() && Shots[j].GetTop() >= Enemies[i].GetY() && Shots[j].GetTop() <= Enemies[i].GetTop())
-			{
-				Shots[i].ShutDown();
-				Enemies[i].ShutDown();
+				else
+				{
+					Shots[j].IsAlive();
+					Enemies[i].IsAlive();
+				}
 			}
-
-			else if (Shots[j].GetRight() >= Enemies[i].GetX() && Shots[j].GetY() >= Enemies[i].GetY() && Shots[j].GetY() <= Enemies[i].GetTop() && Shots[j].GetTop() >= Enemies[i].GetTop())
+			if (Player.GetRight() >= Enemies[i].GetX() && Player.GetRight() <= Enemies[i].GetRight())
 			{
-				Shots[i].ShutDown();
-				Enemies[i].ShutDown();
-			}
-			else
-			{
-				Shots[j].IsAlive();
-				Enemies[i].IsAlive();
-			}
-		}
+				if (Player.GetY() >= Enemies[i].GetY() && Player.GetY() <= Enemies[i].GetTop() && Player.GetTop() >= Enemies[i].GetTop())
+				{
+					Release();
+				}
 
-		if (Player.GetRight() >= Enemies[i].GetX() && Player.GetRight() <= Enemies[i].GetRight() && Player.GetY() >= Enemies[i].GetY() && Player.GetY() <= Enemies[i].GetTop() && Player.GetTop() >= Enemies[i].GetTop())
-		{
-			Release();
-		}
-
-		else if (Player.GetRight() >= Enemies[i].GetX() && Player.GetRight() <= Enemies[i].GetRight() && Player.GetY() <= Enemies[i].GetY() && Player.GetTop() >= Enemies[i].GetY() && Player.GetTop() <= Enemies[i].GetTop())
-		{
-			Release();
-		}
-		HASTA AQUÍ*/
+				else if (Player.GetY() <= Enemies[i].GetY() && Player.GetTop() >= Enemies[i].GetY() && Player.GetTop() <= Enemies[i].GetTop())
+				{
+					Release();
+				}
+			}
+			
 	}
 
 	//Player update
