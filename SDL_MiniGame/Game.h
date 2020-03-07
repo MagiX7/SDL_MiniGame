@@ -14,7 +14,7 @@
 #define WINDOW_HEIGHT      720
 #define MAX_KEYS		   256
 #define MAX_SHOTS		   32
-#define AMOUNT_OF_ENEMIES  32      
+#define AMOUNT_OF_ENEMIES  64      
 
 class Game
 {

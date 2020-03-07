@@ -28,6 +28,20 @@ int Entity::GetX()
 {
 	return x;
 }
+int Entity::GetY() 
+{
+	return y;
+}
+int Entity::GetRight()
+{
+	int x2 = x + width;
+	return x2;
+}
+int Entity::GetTop()
+{
+	int y2 = y + height;
+	return y2;
+}
 void Entity::ShutDown()
 {
 	is_alive = false;
