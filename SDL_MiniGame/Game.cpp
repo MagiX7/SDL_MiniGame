@@ -86,9 +86,11 @@ bool Game::Update()
 		idx_shot %= MAX_SHOTS;
 	}
 
+	//Esto nos permite conseguir el tiempo en frames desde que se inicia el juego
+	//Lo dividimos entre 100 para que en vez de milesimas, sea un poco mas
 	int frame_start = SDL_GetTicks() / 100;
 
-	if (frame_start % 5 == 0)
+	if (frame_start % 5 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
 	{
 		int x, y, w, h;
 
