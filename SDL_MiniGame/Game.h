@@ -10,11 +10,11 @@
 
 #include "Entity.h"
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
-#define MAX_KEYS 256
-#define MAX_SHOTS		32
-
+#define WINDOW_WIDTH       1280
+#define WINDOW_HEIGHT      720
+#define MAX_KEYS		   256
+#define MAX_SHOTS		   32
+#define AMOUNT_OF_ENEMIES  32      
 
 class Game
 {
@@ -33,9 +33,11 @@ private:
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
 
-	Entity Player, Shots[MAX_SHOTS];
+	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES];
 	int idx_shot;
+	int idx_enemies;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];
 };
+

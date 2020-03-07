@@ -1,5 +1,7 @@
 #include "Game.h"
+#include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 Game::Game() {}
 Game::~Game() {}
@@ -32,6 +34,9 @@ bool Game::Init()
 	//Init variables
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 20, 5);
 	idx_shot = 0;
+	Enemies->Init(WINDOW_WIDTH - 50, WINDOW_HEIGHT >> 1, 30, 10, 2);
+
+	srand(time(NULL));
 
 	return true;
 }
@@ -81,7 +86,34 @@ bool Game::Update()
 		idx_shot %= MAX_SHOTS;
 	}
 
+	int frame_start = SDL_GetTicks() / 100;
+
+
+	if (frame_start % 20 == 0)
+	{
+		int x, y, w, h;
+
+		Enemies->GetRect(&x, &y, &w, &h);
+		y = rand() % WINDOW_HEIGHT;
+		Enemies[idx_enemies].Init(WINDOW_WIDTH - 20, y, 20, 10, 2);
+		idx_enemies++;
+		idx_enemies %= AMOUNT_OF_ENEMIES;
+	}
+
 	//Logic
+	//Enemies update
+
+
+	for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
+	{
+
+		if (Enemies[i].IsAlive())
+		{
+			Enemies[i].Move(-2, 0);
+			if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
+		}
+	}
+
 	//Player update
 	Player.Move(fx, fy);
 	//Shots update
@@ -108,6 +140,17 @@ void Game::Draw()
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
 	SDL_RenderFillRect(Renderer, &rc);
+
+	//Draw enemies
+	SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
+	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++)
+	{
+		if (Enemies[i].IsAlive())
+		{
+			Enemies[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
 
 	//Draw shots
 	SDL_SetRenderDrawColor(Renderer, 192, 0, 0, 255);
