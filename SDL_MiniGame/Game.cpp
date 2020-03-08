@@ -34,18 +34,34 @@ bool Game::Init()
 		keys[i] = KEY_IDLE;
 
 	//Init variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 20, 5); // estaba en 50,20
+	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 70, 5); // estaba en 50,20
 	idx_shot = 0;
 	idx_enemies = 0;
 
 	srand(time(NULL));
 	contador = 0;
 
+	IMG_Init(IMG_INIT_PNG);
+	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
+	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.png"));
+	enemy_sprite[1] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 1.png"));
+	enemy_sprite[2] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 2.png"));
+	enemy_sprite[3] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 3.png"));
+	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.png"));
+	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.png"));
+	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.png"));
+	enemy_sprite[7] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 7.png"));
+
 	return true;
 }
 void Game::Release()
 {
 	//Clean up all SDL initialized subsystems
+	for (int i = 0; i < 8; i++)
+	{
+		SDL_DestroyTexture(enemy_sprite[i]);
+	}
+	SDL_DestroyTexture(img_player);
 	SDL_Quit();
 }
 bool Game::Input()
@@ -184,7 +200,7 @@ void Game::Draw()
 	SDL_Rect rc;
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
-	SDL_RenderFillRect(Renderer, &rc);
+	SDL_RenderCopy(Renderer, img_player, NULL, &rc);
 
 	//Draw enemies
 	SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
@@ -193,7 +209,10 @@ void Game::Draw()
 		if (Enemies[i].IsAlive())
 		{
 			Enemies[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			for (int i = 0; i < 8; i++)
+			{
+				SDL_RenderCopy(Renderer, enemy_sprite[i], NULL, &rc);
+			}
 		}
 	}
 
