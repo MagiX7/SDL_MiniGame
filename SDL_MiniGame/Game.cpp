@@ -93,17 +93,10 @@ bool Game::Update()
 	//Player update
 	Player.Move(fx, fy);
 
-	//Esto nos permite conseguir el tiempo en frames desde que se inicia el juego
-	//Lo dividimos entre 100 para que en vez de milesimas, sea un poco mas
+	
 
-	//int frame_start = SDL_GetTicks() / 1000;
 	contador++;
 
-	cout << contador << endl;
-
-	if (contador % 20 == 0) {
-		cout << "SPAWN" << endl;
-	}
 	if (contador % 10 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
 	{
 		int x, y, w, h;
@@ -136,14 +129,12 @@ bool Game::Update()
 			if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
 			if (Enemies[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
 
-				Enemies[i].ShutDown();
+				SDL_Delay(500);
+				Release();
+
 			}
 		}
-		/*for (int j = 0; j < AMOUNT_OF_ENEMIES; ++j)
-		{
 
-		}
-		*/
 
 	}
 
@@ -151,13 +142,34 @@ bool Game::Update()
 	//Shots update
 	for (int i = 0; i < MAX_SHOTS; ++i)
 	{
+		
 		if (Shots[i].IsAlive())
 		{
 			Shots[i].Move(1, 0);
-			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
+
+			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();	
 		}
 	}
 
+	//Hitboxes
+	for (int i = 0; i < MAX_SHOTS; i++)
+	{
+		int x, y, w, h;
+		int x_2,y_2, w_2, h_2;
+		Shots[i].GetRect(&x, &y, &w, &h);
+		for (int j = 0; j < AMOUNT_OF_ENEMIES; j++)
+		{
+			Enemies[j].GetRect(&x_2, &y_2, &w_2, &h_2);
+
+			if (Shots[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
+				Enemies[j].ShutDown();
+				Shots[i].ShutDown();
+			}
+
+		}
+		
+	}
+	
 
 	return false;
 }

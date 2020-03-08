@@ -34,7 +34,7 @@ bool Entity::Touching(int posx_1, int posy_1, int w_1, int h_1, int posx_2, int 
 
 
 
-	if (posx_2 > posx_1&& posx_2 < (posx_1 + w_1) && (posy_2 + h_2) > posy_1 && (posy_2 + h_2) < (posy_1 + h_1)) {
+	if (posx_2 > posx_1 && posx_2 < (posx_1 + w_1) && (posy_2 + h_2) > posy_1 && (posy_2 + h_2) < (posy_1 + h_1)) {
 		return true;
 	}
 	else if (posx_2 > posx_1 && posx_2 < (posx_1 + w_1) && posy_2 > posy_1&& posy_2 < (posy_1 + h_1)) {
