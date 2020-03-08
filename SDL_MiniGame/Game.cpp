@@ -125,7 +125,7 @@ bool Game::Update()
 
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
 	{
-
+	
 		if (Enemies[i].IsAlive())
 		{
 			Enemies[i].Move(-2, 0);
@@ -165,7 +165,7 @@ bool Game::Update()
 				Release();
 			}
 		}
-
+		
 	}
 
 
