@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <iostream>
+using namespace std;
 
 Game::Game() {}
 Game::~Game() {}
@@ -34,8 +36,10 @@ bool Game::Init()
 	//Init variables
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 20, 5);
 	idx_shot = 0;
+	idx_enemies = 0;
 
 	srand(time(NULL));
+	contador = 0;
 
 	return true;
 }
@@ -85,20 +89,30 @@ bool Game::Update()
 		idx_shot++;
 		idx_shot %= MAX_SHOTS;
 	}
+	
+	//Player update
+	Player.Move(fx, fy);
 
 	//Esto nos permite conseguir el tiempo en frames desde que se inicia el juego
 	//Lo dividimos entre 100 para que en vez de milesimas, sea un poco mas
-	int frame_start = SDL_GetTicks() / 100;
-
-
-	if (frame_start % 10 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
+	
+	//int frame_start = SDL_GetTicks() / 1000;
+	contador++;
+	
+	cout << contador << endl;
+	
+	if (contador % 20 == 0) {
+		cout << "SPAWN" << endl;
+	}
+	if (contador % 20 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
 	{
 		int x, y, w, h;
-
-		Enemies->GetRect(&x, &y, &w, &h);
-		//int pos_x = WINDOW_WIDTH - 20;
-		y = rand() % WINDOW_HEIGHT;
-		Enemies[idx_enemies].Init(WINDOW_WIDTH - 20, y, 20, 10, 2);
+		int pos_x = WINDOW_WIDTH - 20;
+		int pos_y = rand() % WINDOW_HEIGHT;
+		
+		Enemies[idx_enemies].Init(pos_x, pos_y, 20, 10, 2);
+		Enemies[idx_enemies].GetRect(&x, &y, &w, &h);
+		
 		idx_enemies++;
 		idx_enemies %= AMOUNT_OF_ENEMIES;
 
@@ -154,8 +168,7 @@ bool Game::Update()
 
 	}
 
-	//Player update
-	Player.Move(fx, fy);
+
 	//Shots update
 	for (int i = 0; i < MAX_SHOTS; ++i)
 	{

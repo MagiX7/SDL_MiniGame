@@ -14,7 +14,7 @@
 #define WINDOW_HEIGHT      720
 #define MAX_KEYS		   256
 #define MAX_SHOTS		   32
-#define AMOUNT_OF_ENEMIES  64     
+#define AMOUNT_OF_ENEMIES  64  
 
 class Game
 {
@@ -36,6 +36,7 @@ private:
 	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES];
 	int idx_shot;
 	int idx_enemies;
+	int contador;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];
