@@ -33,37 +33,19 @@ int Entity::GetX()
 bool Entity::Touching(int posx_1, int posy_1, int w_1, int h_1, int posx_2, int posy_2, int w_2, int h_2) {
 
 
-	// Caso 1, Cuando el autor toca al centro del atacante
-	if (posx_1 < posx_2 && (posx_1 + w_1) > posx_2&& posy_1 < posy_2 && (posy_1 + h_1)> posy_2) {
+
+	if (posx_2 > posx_1&& posx_2 < (posx_1 + w_1) && (posy_2 + h_2) > posy_1 && (posy_2 + h_2) < (posy_1 + h_1)) {
+		return true;
+	}
+	else if (posx_2 > posx_1 && posx_2 < (posx_1 + w_1) && posy_2 > posy_1&& posy_2 < (posy_1 + h_1)) {
+		return true;
+	}
+	else if (posx_1 < posx_2 && (posx_1 + w_1) > posx_2&& posy_1 < posy_2 && (posy_1 + h_1)> posy_2) {
 		return true;
 	}
 	else {
 		return false;
 	}
-
-	/*
-	if ((posx_1 + w_1) >= (posx_2) && (posx_1 + w_1) <= (posx_2 + w_2) && (posy_1) >= posy_2 && posy_1 <= (posy_2 + h_2) ) {
-		return true;
-	}
-	else if ((posx_1 + w_1) >= (posx_2) && (posx_1 + w_1) <= (posx_2 + w_2) && (posy_1) <= posy_2 && posy_1 >= (posy_2 + h_2) ) {
-		return true;
-	}
-	else {
-		return false;
-	}
-
-	if ((posx_1) <= (posx_2 + w_2) && (posx_1) >= (posx_2) && (posy_1) >= posy_2 && posy_1 <= (posy_2 + h_2)) {
-		return true;
-	}
-	else if ((posx_1) <= (posx_2 + w_2) && (posx_1) >= (posx_2) && (posy_1) <= posy_2 && posy_1 >= (posy_2 + h_2)) {
-		return true;
-	}
-	else {
-		return false;
-	}
-	*/
-
-
 
 }
 void Entity::ShutDown()
