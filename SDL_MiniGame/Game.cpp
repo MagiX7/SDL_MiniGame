@@ -134,7 +134,7 @@ bool Game::Update()
 
 		for (int j = 0; j < MAX_SHOTS; j++)
 		{
-			if (Shots[j].GetRight() >= Enemies[i].GetX())
+			if (Shots[j].GetRight() >= Enemies[i].GetX() && Shots[j].GetRight() <= Enemies[i].GetRight())
 			{
 				if (Shots[j].GetY() <= Enemies[i].GetY() && Shots[j].GetTop() >= Enemies[i].GetY() && Shots[j].GetTop() <= Enemies[i].GetTop()) {
 					Shots[j].ShutDown();
