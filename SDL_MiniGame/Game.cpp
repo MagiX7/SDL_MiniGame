@@ -117,7 +117,7 @@ bool Game::Update()
 
 		if (Enemies[i].IsAlive())
 		{
-			Enemies[i].Move(-2, 0);
+			Enemies[i].Move(-5, 0);
 			//MIRAR A PARTIR DE AQUÍ!!!!!!!!!!!!!!!!! ENTREGA ENTREGA ENTREGA
 		//	if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
 		}
