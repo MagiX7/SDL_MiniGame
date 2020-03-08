@@ -24,7 +24,6 @@ public:
 
 	bool Init();
 	void Release();
-
 	bool Input();
 	bool Update();
 	void Draw();
