@@ -31,11 +31,13 @@ bool Game::Init()
 	for (int i = 0; i < MAX_KEYS; ++i)
 		keys[i] = KEY_IDLE;
 
+
 	//Init variables
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5); // estaba en 50,20
 	idx_shot = 0;
 	idx_enemies = 0;
 
+	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	srand(time(NULL));
 	contador = 0;
 
@@ -49,15 +51,15 @@ bool Game::Init()
 	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.jpg"));
 	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.jpg"));
 	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.jpg"));
-
+	img_menu = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Menu.png"));
 	bird = 0;
-
+	menu = true;
 	return true;
 }
 void Game::Release()
 {
 	//Clean up all SDL initialized subsystems
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		SDL_DestroyTexture(enemy_sprite[i]);
 	}
@@ -66,6 +68,7 @@ void Game::Release()
 }
 bool Game::Input()
 {
+
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
 	{
@@ -90,101 +93,110 @@ bool Game::Update()
 	//Read Input
 	if (!Input())	return true;
 
-	//Process Input
-	int fx = 0, fy = 0;
-	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
-	if (keys[SDL_SCANCODE_W] == KEY_REPEAT)	fy = -1;
-	if (keys[SDL_SCANCODE_S] == KEY_REPEAT)	fy = 1;
-	if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
-	if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
-	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
-	{
-		int x, y, w, h;
-		Player.GetRect(&x, &y, &w, &h);
-		Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 20, 10, 10);
-		idx_shot++;
-		idx_shot %= MAX_SHOTS;
+	if (menu == true) {
+		if (keys[SDL_SCANCODE_X] == KEY_DOWN) {
+			menu = false;
+		}
 	}
+	else {
 
-	//Player update
-	
-	Player.Move(fx, fy);
-	Player.SetPosition();
-	
-	
 
-	contador++;
 
-	if (contador % 10 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
-	{
-		int x, y, w, h;
-		int pos_x = WINDOW_WIDTH - 20;
-		int pos_y = rand() % WINDOW_HEIGHT;
+		//Process Input
+		int fx = 0, fy = 0;
+		if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
+		if (keys[SDL_SCANCODE_W] == KEY_REPEAT)	fy = -1;
+		if (keys[SDL_SCANCODE_S] == KEY_REPEAT)	fy = 1;
+		if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
+		if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
+		if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
+		{
+			int x, y, w, h;
+			Player.GetRect(&x, &y, &w, &h);
+			Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 20, 10, 10);
+			idx_shot++;
+			idx_shot %= MAX_SHOTS;
+		}
 
-		Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 2);
-		Enemies[idx_enemies].GetRect(&x, &y, &w, &h);
+		//Player update
 
-		idx_enemies++;
-		idx_enemies %= AMOUNT_OF_ENEMIES;
+		Player.Move(fx, fy);
+		Player.SetPosition();
 
-	}
 
-	//Logic
-	//Enemies update
 
-	for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
-	{
+		contador++;
 
-		if (Enemies[i].IsAlive())
+		if (contador % 10 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
+		{
+			int x, y, w, h;
+			int pos_x = WINDOW_WIDTH - 20;
+			int pos_y = rand() % WINDOW_HEIGHT;
+
+			Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 2);
+			Enemies[idx_enemies].GetRect(&x, &y, &w, &h);
+
+			idx_enemies++;
+			idx_enemies %= AMOUNT_OF_ENEMIES;
+
+		}
+
+		//Logic
+		//Enemies update
+
+		for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
+		{
+
+			if (Enemies[i].IsAlive())
+			{
+				int x, y, w, h;
+				int x_2, y_2, w_2, h_2;
+				Player.GetRect(&x, &y, &w, &h);
+				Enemies[i].GetRect(&x_2, &y_2, &w_2, &h_2);
+				Enemies[i].Move(-10, 0);
+				if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
+				if (Enemies[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
+
+					SDL_Delay(600);
+					Release();
+					return true;
+				}
+			}
+		}
+
+
+		//Shots update
+		for (int i = 0; i < MAX_SHOTS; ++i)
+		{
+
+			if (Shots[i].IsAlive())
+			{
+				Shots[i].Move(1, 0);
+
+				if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
+			}
+		}
+
+		//Hitboxes
+		for (int i = 0; i < MAX_SHOTS; i++)
 		{
 			int x, y, w, h;
 			int x_2, y_2, w_2, h_2;
-			Player.GetRect(&x, &y, &w, &h);
-			Enemies[i].GetRect(&x_2, &y_2, &w_2, &h_2);
-			Enemies[i].Move(-10, 0);
-			if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
-			if (Enemies[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
+			Shots[i].GetRect(&x, &y, &w, &h);
+			for (int j = 0; j < AMOUNT_OF_ENEMIES; j++)
+			{
+				Enemies[j].GetRect(&x_2, &y_2, &w_2, &h_2);
 
-				SDL_Delay(600);
-				Release();
-				return true;
+				if (Shots[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
+					Enemies[j].ShutDown();
+					Shots[i].ShutDown();
+
+
+				}
 			}
 		}
+
 	}
-
-
-	//Shots update
-	for (int i = 0; i < MAX_SHOTS; ++i)
-	{
-		
-		if (Shots[i].IsAlive())
-		{
-			Shots[i].Move(1, 0);
-
-			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();	
-		}
-	}
-
-	//Hitboxes
-	for (int i = 0; i < MAX_SHOTS; i++)
-	{
-		int x, y, w, h;
-		int x_2,y_2, w_2, h_2;
-		Shots[i].GetRect(&x, &y, &w, &h);
-		for (int j = 0; j < AMOUNT_OF_ENEMIES; j++)
-		{
-			Enemies[j].GetRect(&x_2, &y_2, &w_2, &h_2);
-
-			if (Shots[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
-				Enemies[j].ShutDown();
-				Shots[i].ShutDown();
-
-
-			}
-		}
-	}
-	
-
 	return false;
 }
 
@@ -202,6 +214,12 @@ void Game::Draw()
 	//SDL_RenderDrawRect(Renderer, &rc);
 	//SDL_RenderFillRect(Renderer, &rc);
 	SDL_RenderCopy(Renderer, img_player, NULL, &rc);
+
+	//Draw menu
+	if (menu == true) {
+		Menu.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+		SDL_RenderCopy(Renderer, img_menu, NULL, &rc);
+	}
 
 	//Draw enemies
 	SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
@@ -222,7 +240,7 @@ void Game::Draw()
 				bird = 0;
 			}
 		}
-		
+
 	}
 
 	//Draw shots
@@ -236,7 +254,7 @@ void Game::Draw()
 		}
 	}
 
-	
+
 
 	//Update screen
 	SDL_RenderPresent(Renderer);
