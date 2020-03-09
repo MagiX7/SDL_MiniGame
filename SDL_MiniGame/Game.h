@@ -42,6 +42,8 @@ private:
 	int contador;
 	int bird;
 	bool menu;
+	int difficulty;
+	int timeGameplay;
 
 
 	SDL_Texture* img_player, * enemy_sprite[7], * img_menu;

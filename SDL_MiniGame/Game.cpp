@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <iostream>
+using namespace std;
 
 Game::Game() {}
 Game::~Game() {}
@@ -147,11 +149,23 @@ bool Game::Update()
 		Player.Move(fx, fy);
 		Player.SetPosition();
 
+		timeGameplay = contador/100;
+		cout << timeGameplay << endl;
 
+		if (timeGameplay < 3) {
+
+			difficulty = 200;
+
+		}
+		else if (timeGameplay > 3) {
+
+			difficulty = 3;
+
+		}
 
 		contador++;
 
-		if (contador % 10 == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
+		if (contador % difficulty == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
 		{
 			int x, y, w, h;
 			int pos_x = WINDOW_WIDTH - 20;
@@ -182,8 +196,16 @@ bool Game::Update()
 				if (Enemies[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
 
 					SDL_Delay(600);
-					Release();
-					return true;
+					//Release();
+					for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
+					{
+						Enemies[i].ShutDown();
+						menu = true;
+						Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5);
+						contador = 0;
+	
+					}
+					//return true;
 				}
 			}
 		}
@@ -214,8 +236,6 @@ bool Game::Update()
 				if (Shots[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
 					Enemies[j].ShutDown();
 					Shots[i].ShutDown();
-
-
 				}
 			}
 		}
