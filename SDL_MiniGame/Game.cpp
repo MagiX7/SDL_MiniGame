@@ -34,7 +34,7 @@ bool Game::Init()
 		keys[i] = KEY_IDLE;
 
 	//Init variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 70, 70, 5); // estaba en 50,20
+	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 20, 5); // estaba en 50,20
 	idx_shot = 0;
 	idx_enemies = 0;
 
@@ -200,7 +200,8 @@ void Game::Draw()
 	SDL_Rect rc;
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
-	SDL_RenderCopy(Renderer, img_player, NULL, &rc);
+	SDL_RenderFillRect(Renderer, &rc);
+	//SDL_RenderCopy(Renderer, img_player, NULL, &rc);
 
 	//Draw enemies
 	SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
@@ -209,10 +210,7 @@ void Game::Draw()
 		if (Enemies[i].IsAlive())
 		{
 			Enemies[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			for (int i = 0; i < 8; i++)
-			{
-				SDL_RenderCopy(Renderer, enemy_sprite[i], NULL, &rc);
-			}
+			SDL_RenderFillRect(Renderer, &rc);
 		}
 	}
 
