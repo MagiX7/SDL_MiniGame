@@ -34,7 +34,7 @@ bool Game::Init()
 		keys[i] = KEY_IDLE;
 
 	//Init variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 20, 5); // estaba en 50,20
+	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5); // estaba en 50,20
 	idx_shot = 0;
 	idx_enemies = 0;
 
@@ -43,14 +43,16 @@ bool Game::Init()
 
 	IMG_Init(IMG_INIT_PNG);
 	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
-	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.png"));
-	enemy_sprite[1] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 1.png"));
-	enemy_sprite[2] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 2.png"));
-	enemy_sprite[3] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 3.png"));
-	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.png"));
-	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.png"));
-	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.png"));
-	enemy_sprite[7] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 7.png"));
+	IMG_Init(IMG_INIT_JPG);
+	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.jpg"));
+	enemy_sprite[1] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 1.jpg"));
+	enemy_sprite[2] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 2.jpg"));
+	enemy_sprite[3] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 3.jpg"));
+	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.jpg"));
+	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.jpg"));
+	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.jpg"));
+
+	bird = 0;
 
 	return true;
 }
@@ -119,7 +121,7 @@ bool Game::Update()
 		int pos_x = WINDOW_WIDTH - 20;
 		int pos_y = rand() % WINDOW_HEIGHT;
 
-		Enemies[idx_enemies].Init(pos_x, pos_y, 20, 10, 2);
+		Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 2);
 		Enemies[idx_enemies].GetRect(&x, &y, &w, &h);
 
 		idx_enemies++;
@@ -189,6 +191,7 @@ bool Game::Update()
 
 	return false;
 }
+
 void Game::Draw()
 {
 	//Set the color used for drawing operations
@@ -200,8 +203,9 @@ void Game::Draw()
 	SDL_Rect rc;
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
-	SDL_RenderFillRect(Renderer, &rc);
-	//SDL_RenderCopy(Renderer, img_player, NULL, &rc);
+	//SDL_RenderDrawRect(Renderer, &rc);
+	//SDL_RenderFillRect(Renderer, &rc);
+	SDL_RenderCopy(Renderer, img_player, NULL, &rc);
 
 	//Draw enemies
 	SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
@@ -210,8 +214,20 @@ void Game::Draw()
 		if (Enemies[i].IsAlive())
 		{
 			Enemies[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			//SDL_RenderDrawRect(Renderer, &rc);
+			//SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, enemy_sprite[bird], NULL, &rc);
+			if (contador % 10 == 0)
+			{
+				bird++;
+				cout << bird << endl;
+			}
+			if (bird == 6)
+			{
+				bird = 0;
+			}
 		}
+		
 	}
 
 	//Draw shots
@@ -224,6 +240,8 @@ void Game::Draw()
 			SDL_RenderFillRect(Renderer, &rc);
 		}
 	}
+
+	
 
 	//Update screen
 	SDL_RenderPresent(Renderer);

@@ -36,8 +36,9 @@ private:
 	int idx_shot;
 	int idx_enemies;
 	int contador;
+	int bird;
 
-	SDL_Texture* img_player, *enemy_sprite[8];
+	SDL_Texture* img_player, *enemy_sprite[7];
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];
