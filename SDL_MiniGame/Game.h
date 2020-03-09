@@ -44,6 +44,7 @@ private:
 	bool menu;
 	int difficulty;
 	int timeGameplay;
+	int pretimeGameplay;
 
 
 	SDL_Texture* img_player, * enemy_sprite[7], * img_menu;

@@ -165,14 +165,25 @@ bool Game::Update()
 
 		if (timeGameplay < 3) {
 
-			difficulty = 200;
+			difficulty = 50;
 
 		}
-		else if (timeGameplay > 3) {
-
-			difficulty = 3;
-
+		else if (timeGameplay > 3 && timeGameplay < 8)
+		{
+			difficulty = 10;
 		}
+		else if (difficulty == 2)
+		{
+			difficulty = 2;
+		}
+		else if (timeGameplay % 2 == 0) {
+			if (pretimeGameplay != timeGameplay)
+			{
+				difficulty -= 1;
+			}
+		}
+		cout << difficulty << endl;
+		pretimeGameplay = timeGameplay;
 
 		contador++;
 
@@ -181,8 +192,15 @@ bool Game::Update()
 			int x, y, w, h;
 			int pos_x = WINDOW_WIDTH - 20;
 			int pos_y = rand() % WINDOW_HEIGHT;
-
-			Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 2);
+			
+			if (timeGameplay > 27)
+			{
+				Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 2);
+			}
+			else
+			{
+				Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 1);
+			}
 			Enemies[idx_enemies].GetRect(&x, &y, &w, &h);
 
 			idx_enemies++;
