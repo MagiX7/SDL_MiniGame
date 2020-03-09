@@ -1,4 +1,5 @@
 #include "Entity.h"
+#define WINDOW_HEIGTH 720
 
 
 Entity::Entity()
@@ -29,10 +30,24 @@ int Entity::GetX()
 	return x;
 }
 
+int Entity::GetY()
+{
+	return y;
+}
+
+void Entity::SetPosition(int dy)
+{
+	if (y > WINDOW_HEIGTH)
+	{
+		y = 0;
+	}
+	else if (y < 0)
+	{
+		y = WINDOW_HEIGTH;
+	}
+}
 
 bool Entity::Touching(int posx_1, int posy_1, int w_1, int h_1, int posx_2, int posy_2, int w_2, int h_2) {
-
-
 
 	if (posx_2 > posx_1 && posx_2 < (posx_1 + w_1) && (posy_2 + h_2) > posy_1 && (posy_2 + h_2) < (posy_1 + h_1)) {
 		return true;

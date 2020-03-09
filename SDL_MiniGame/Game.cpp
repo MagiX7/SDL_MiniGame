@@ -109,9 +109,11 @@ bool Game::Update()
 	}
 
 	//Player update
-	Player.Move(fx, fy);
-
 	
+	Player.Move(fx, fy);
+	Player.SetPosition(WINDOW_HEIGHT);
+	
+
 
 	contador++;
 
@@ -152,8 +154,6 @@ bool Game::Update()
 
 			}
 		}
-
-
 	}
 
 
@@ -183,10 +183,10 @@ bool Game::Update()
 				Enemies[j].ShutDown();
 				Shots[i].ShutDown();
 			}
-
 		}
-		
 	}
+	
+
 	
 
 	return false;
