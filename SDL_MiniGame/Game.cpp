@@ -37,7 +37,10 @@ bool Game::Init()
 	idx_shot = 0;
 	idx_enemies = 0;
 
+
 	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+
+	
 	srand(time(NULL));
 	contador = 0;
 
@@ -51,7 +54,9 @@ bool Game::Init()
 	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.jpg"));
 	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.jpg"));
 	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.jpg"));
+
 	img_menu = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Menu.png"));
+
 	bird = 0;
 	menu = true;
 	return true;
@@ -68,7 +73,6 @@ void Game::Release()
 }
 bool Game::Input()
 {
-
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
 	{
@@ -97,6 +101,26 @@ bool Game::Update()
 		if (keys[SDL_SCANCODE_X] == KEY_DOWN) {
 			menu = false;
 		}
+
+	}
+	else {
+
+	
+
+	//Process Input
+	int fx = 0, fy = 0;
+	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
+	if (keys[SDL_SCANCODE_W] == KEY_REPEAT)	fy = -1;
+	if (keys[SDL_SCANCODE_S] == KEY_REPEAT)	fy = 1;
+	if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
+	if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
+	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
+	{
+		int x, y, w, h;
+		Player.GetRect(&x, &y, &w, &h);
+		Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 20, 10, 10);
+		idx_shot++;
+		idx_shot %= MAX_SHOTS;
 	}
 	else {
 
@@ -196,6 +220,11 @@ bool Game::Update()
 			}
 		}
 
+
+
+	}
+	
+
 	}
 	return false;
 }
@@ -206,7 +235,7 @@ void Game::Draw()
 	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 	//Clear rendering target
 	SDL_RenderClear(Renderer);
-
+	
 	//Draw player
 	SDL_Rect rc;
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
@@ -217,6 +246,7 @@ void Game::Draw()
 
 	//Draw menu
 	if (menu == true) {
+
 		Menu.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 		SDL_RenderCopy(Renderer, img_menu, NULL, &rc);
 	}

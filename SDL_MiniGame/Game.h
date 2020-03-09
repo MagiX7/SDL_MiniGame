@@ -27,17 +27,22 @@ public:
 	bool Input();
 	bool Update();
 	void Draw();
+	
 
 private:
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
 
+
 	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES], Menu;
+
+	
 	int idx_shot;
 	int idx_enemies;
 	int contador;
 	int bird;
 	bool menu;
+
 
 	SDL_Texture* img_player, * enemy_sprite[7], * img_menu;
 
