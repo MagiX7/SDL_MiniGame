@@ -109,6 +109,12 @@ bool Game::Update()
 			menu = false;
 		}
 
+		if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)
+		{
+			Release();
+			return true;
+		}
+
 	}
 	else {
 
