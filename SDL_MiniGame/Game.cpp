@@ -31,11 +31,13 @@ bool Game::Init()
 	for (int i = 0; i < MAX_KEYS; ++i)
 		keys[i] = KEY_IDLE;
 
+
 	//Init variables
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5); // estaba en 50,20
 	idx_shot = 0;
 	idx_enemies = 0;
 
+	BackgroundEnt.Init(0,0,WINDOW_WIDTH,WINDOW_HEIGHT,0);
 	srand(time(NULL));
 	contador = 0;
 
@@ -49,9 +51,9 @@ bool Game::Init()
 	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.jpg"));
 	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.jpg"));
 	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.jpg"));
-
+	Background = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Menu.png"));
 	bird = 0;
-
+	menu = true;
 	return true;
 }
 void Game::Release()
@@ -66,6 +68,7 @@ void Game::Release()
 }
 bool Game::Input()
 {
+	
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
 	{
@@ -89,6 +92,15 @@ bool Game::Update()
 {
 	//Read Input
 	if (!Input())	return true;
+
+	if (menu == true) {
+		if (keys[SDL_SCANCODE_X] == KEY_DOWN) {
+			menu = false;
+		}
+	}
+	else {
+
+	
 
 	//Process Input
 	int fx = 0, fy = 0;
@@ -184,7 +196,7 @@ bool Game::Update()
 		}
 	}
 	
-
+	}
 	return false;
 }
 
@@ -194,7 +206,7 @@ void Game::Draw()
 	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 	//Clear rendering target
 	SDL_RenderClear(Renderer);
-
+	
 	//Draw player
 	SDL_Rect rc;
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
@@ -202,6 +214,12 @@ void Game::Draw()
 	//SDL_RenderDrawRect(Renderer, &rc);
 	//SDL_RenderFillRect(Renderer, &rc);
 	SDL_RenderCopy(Renderer, img_player, NULL, &rc);
+
+	//Draw menu
+	if (menu == true) {
+		BackgroundEnt.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+		SDL_RenderCopy(Renderer, Background, NULL, &rc);
+	}
 
 	//Draw enemies
 	SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);

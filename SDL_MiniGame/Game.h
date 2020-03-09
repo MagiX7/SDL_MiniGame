@@ -27,18 +27,20 @@ public:
 	bool Input();
 	bool Update();
 	void Draw();
+	
 
 private:
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
 
-	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES];
+	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES],BackgroundEnt;
 	int idx_shot;
 	int idx_enemies;
 	int contador;
 	int bird;
+	bool menu;
 
-	SDL_Texture* img_player, *enemy_sprite[7];
+	SDL_Texture* img_player, *enemy_sprite[7], *Background;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];
