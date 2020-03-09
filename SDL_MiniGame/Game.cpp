@@ -100,6 +100,12 @@ bool Game::Update()
 	if (!Input())	return true;
 
 	if (menu == true) {
+
+		for (int i = 0; i < MAX_SHOTS; i++)
+		{
+			Shots[i].ShutDown();
+		}
+		
 		if (keys[SDL_SCANCODE_X] == KEY_DOWN) {
 			menu = false;
 		}
@@ -266,7 +272,6 @@ void Game::Draw()
 
 	//Draw menu
 	if (menu == true) {
-
 		Menu.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 		SDL_RenderCopy(Renderer, img_menu, NULL, &rc);
 	}
