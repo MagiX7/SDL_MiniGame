@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include <iostream>
-using namespace std;
 
 Game::Game() {}
 Game::~Game() {}
@@ -111,9 +109,9 @@ bool Game::Update()
 	//Player update
 	
 	Player.Move(fx, fy);
-	Player.SetPosition(WINDOW_HEIGHT);
+	Player.SetPosition();
 	
-
+	
 
 	contador++;
 
@@ -134,8 +132,6 @@ bool Game::Update()
 	//Logic
 	//Enemies update
 
-
-
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
 	{
 
@@ -145,13 +141,13 @@ bool Game::Update()
 			int x_2, y_2, w_2, h_2;
 			Player.GetRect(&x, &y, &w, &h);
 			Enemies[i].GetRect(&x_2, &y_2, &w_2, &h_2);
-			Enemies[i].Move(-2, 0);
+			Enemies[i].Move(-10, 0);
 			if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
 			if (Enemies[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
 
-				SDL_Delay(500);
+				SDL_Delay(600);
 				Release();
-
+				return true;
 			}
 		}
 	}
@@ -182,11 +178,11 @@ bool Game::Update()
 			if (Shots[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
 				Enemies[j].ShutDown();
 				Shots[i].ShutDown();
+
+
 			}
 		}
 	}
-	
-
 	
 
 	return false;
@@ -220,7 +216,6 @@ void Game::Draw()
 			if (contador % 10 == 0)
 			{
 				bird++;
-				cout << bird << endl;
 			}
 			if (bird == 6)
 			{

@@ -35,7 +35,7 @@ int Entity::GetY()
 	return y;
 }
 
-void Entity::SetPosition(int dy)
+void Entity::SetPosition()
 {
 	if (y > WINDOW_HEIGTH)
 	{

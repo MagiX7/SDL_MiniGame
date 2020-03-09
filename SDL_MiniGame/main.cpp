@@ -14,5 +14,4 @@ int main(int argc, char* args[])
 
 	game.Release();
 	return 0;
-
 }
