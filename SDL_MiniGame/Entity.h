@@ -11,6 +11,7 @@ public:
 	int  GetY();
 	void SetPosition();
 	bool Touching(int posx_1, int posy_1, int w_1, int h_1, int posx_2, int posy_2, int w_2, int h_2);
+	bool TouchingShot(int posx_1, int posy_1, int w_1, int h_1, int posx_2, int posy_2, int w_2, int h_2);
 	void ShutDown();
 	bool IsAlive();
 	void Move(int dx, int dy);

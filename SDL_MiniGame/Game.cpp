@@ -100,6 +100,9 @@ bool Game::Update()
 	if (!Input())	return true;
 
 	if (menu == true) {
+		for (int i = 0; i < MAX_SHOTS; ++i) {
+			Shots[i].ShutDown();
+		}
 		if (keys[SDL_SCANCODE_X] == KEY_DOWN) {
 			menu = false;
 		}
@@ -210,19 +213,6 @@ bool Game::Update()
 			}
 		}
 
-
-		//Shots update
-		for (int i = 0; i < MAX_SHOTS; ++i)
-		{
-
-			if (Shots[i].IsAlive())
-			{
-				Shots[i].Move(1, 0);
-
-				if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
-			}
-		}
-
 		//Hitboxes
 		for (int i = 0; i < MAX_SHOTS; i++)
 		{
@@ -233,10 +223,22 @@ bool Game::Update()
 			{
 				Enemies[j].GetRect(&x_2, &y_2, &w_2, &h_2);
 
-				if (Shots[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
+				if (Shots->TouchingShot(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
 					Enemies[j].ShutDown();
-					Shots[i].ShutDown();
+					Shots->ShutDown();
 				}
+			}
+		}
+
+		//Shots update
+		for (int i = 0; i < MAX_SHOTS; ++i)
+		{
+
+			if (Shots[i].IsAlive())
+			{
+				Shots[i].Move(1, 0);
+
+				if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
 			}
 		}
 
