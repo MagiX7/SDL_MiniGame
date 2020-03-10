@@ -197,8 +197,7 @@ bool Game::Update()
 				difficulty -= 2;
 			}
 		}
-		cout << difficulty << endl;
-		cout << timeGameplay << endl;
+
 		pretimeGameplay = timeGameplay;
 
 		contador++;
