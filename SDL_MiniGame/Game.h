@@ -32,7 +32,7 @@ private:
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
 	Mix_Music* Music;
-	Mix_Chunk* NukeSound;
+	Mix_Chunk* NukeSound, * ShotSound;
 
 
 	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES], Menu, Nuke, Background;

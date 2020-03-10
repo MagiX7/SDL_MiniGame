@@ -54,6 +54,7 @@ bool Game::Init()
 	idx_enemies = 0;
 	Music = Mix_LoadMUS("Oushit.wav");
 	NukeSound = Mix_LoadWAV("Nuke.wav");
+	ShotSound = Mix_LoadWAV("Laser_Gun_Sound_Effect.wav");
 	
 
 	srand(time(NULL));
@@ -97,7 +98,8 @@ void Game::Release()
 	SDL_DestroyTexture(img_booster);
 	SDL_DestroyTexture(img_menu);
 	SDL_DestroyTexture(img_shot);
-	//Mix_FreeMusic(Music);
+	Mix_FreeMusic(Music);
+	Mix_FreeChunk(NukeSound);
 	SDL_Quit();
 }
 bool Game::Input()
@@ -159,9 +161,11 @@ bool Game::Update()
 		{
 			int x, y, w, h;
 			Player.GetRect(&x, &y, &w, &h);
-			Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 20, 10, 10);
+			Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 30, 20, 10);
 			idx_shot++;
 			idx_shot %= MAX_SHOTS;
+			Mix_PlayChannel(2, ShotSound, 0);
+			Mix_VolumeChunk(ShotSound, 30);
 		}
 	
 		//Player update
@@ -178,21 +182,23 @@ bool Game::Update()
 			difficulty = 70;
 
 		}
-		else if (timeGameplay > 8 /*&& timeGameplay < 8*/)
+		else if (timeGameplay > 8 && timeGameplay < 10)
 		{
-			difficulty = 2;
+			difficulty = 10;
 		}
 		else if (difficulty == 2)
 		{
 			difficulty = 2;
 		}
-		else if (timeGameplay % 2 == 0) {
+		else if (timeGameplay % 2 == 0) 
+		{
 			if (pretimeGameplay != timeGameplay)
 			{
-				difficulty -= 1;
+				difficulty -= 2;
 			}
 		}
-		
+		cout << difficulty << endl;
+		cout << timeGameplay << endl;
 		pretimeGameplay = timeGameplay;
 
 		contador++;
@@ -203,7 +209,7 @@ bool Game::Update()
 			int pos_x = WINDOW_WIDTH - 20;
 			int pos_y = rand() % WINDOW_HEIGHT;
 			
-			if (timeGameplay > 27)
+			if (timeGameplay > 18)
 			{
 				Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 2);
 			}
@@ -278,6 +284,7 @@ bool Game::Update()
 				}
 				Nuke.ShutDown();
 				Mix_PlayChannel(1, NukeSound, 0);
+				Mix_VolumeChunk(NukeSound, 50);
 				boosterActive = false;
 				nukeAlpha = true;
 			}
