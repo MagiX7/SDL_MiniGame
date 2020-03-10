@@ -55,6 +55,7 @@ bool Game::Init()
 
 	IMG_Init(IMG_INIT_PNG);
 	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
+	img_background = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Background.png"));
 	IMG_Init(IMG_INIT_JPG);
 	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.jpg"));
 	enemy_sprite[1] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 1.jpg"));
