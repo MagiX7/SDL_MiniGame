@@ -276,6 +276,7 @@ bool Game::Update()
 					Enemies[i].ShutDown();
 				}
 				Nuke.ShutDown();
+				Mix_PlayChannel(1, NukeSound, 1);
 				boosterActive = false;
 			}
 		}
@@ -340,7 +341,7 @@ void Game::Draw()
 		SDL_RenderCopy(Renderer, img_menu, NULL, &rc);
 	}
 	//Draw Nuke
-	if (Nuke.IsAlive()) {
+	if (Nuke.IsAlive() && menu == false) {
 		
 		Nuke.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 		SDL_RenderCopy(Renderer, img_booster, NULL, &rc);
