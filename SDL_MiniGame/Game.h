@@ -52,6 +52,7 @@ private:
 	int pretimeGameplay;
 	int nuke;
 	bool boosterActive;
+	bool nukeAlpha;
 	
 
 
