@@ -149,7 +149,6 @@ bool Game::Update()
 
 		if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)
 		{
-			Release();
 			return true;
 		}
 	}
