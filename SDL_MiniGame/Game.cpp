@@ -15,6 +15,11 @@ bool Game::Init()
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+
+		SDL_Log("Unable to initialize: %s", SDL_GetError());
+		return false;
+	}
 	//Create our window: title, x, y, w, h, flags
 	Window = SDL_CreateWindow("Spaceship: arrow keys + space", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (Window == NULL)
@@ -38,7 +43,7 @@ bool Game::Init()
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5); // estaba en 50,20
 	idx_shot = 0;
 	idx_enemies = 0;
-
+	Music = Mix_LoadMUS("Oushit.wav");
 
 	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
@@ -71,6 +76,7 @@ void Game::Release()
 		SDL_DestroyTexture(enemy_sprite[i]);
 	}
 	SDL_DestroyTexture(img_player);
+	Mix_FreeMusic(Music);
 	SDL_Quit();
 }
 bool Game::Input()
@@ -107,6 +113,7 @@ bool Game::Update()
 
 		if (keys[SDL_SCANCODE_X] == KEY_DOWN) {
 			menu = false;
+			Mix_PlayMusic(Music, -1);
 		}
 
 		if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)
@@ -163,14 +170,14 @@ bool Game::Update()
 		timeGameplay = contador/100;
 		cout << timeGameplay << endl;
 
-		if (timeGameplay < 3) {
+		if (timeGameplay < 8) {
 
-			difficulty = 50;
+			difficulty = 70;
 
 		}
-		else if (timeGameplay > 3 && timeGameplay < 8)
+		else if (timeGameplay > 8 /*&& timeGameplay < 8*/)
 		{
-			difficulty = 10;
+			difficulty = 2;
 		}
 		else if (difficulty == 2)
 		{
@@ -182,7 +189,7 @@ bool Game::Update()
 				difficulty -= 1;
 			}
 		}
-		cout << difficulty << endl;
+		
 		pretimeGameplay = timeGameplay;
 
 		contador++;
@@ -223,15 +230,17 @@ bool Game::Update()
 				Enemies[i].Move(-10, 0);
 				if (Enemies[i].GetX() > WINDOW_WIDTH)  Enemies[i].ShutDown();
 				if (Enemies[i].Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
-
+					Mix_HaltMusic();
 					SDL_Delay(600);
 					//Release();
 					for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
 					{
 						Enemies[i].ShutDown();
+						
 						menu = true;
 						Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5);
 						contador = 0;
+						
 	
 					}
 					//return true;

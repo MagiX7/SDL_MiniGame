@@ -32,6 +32,7 @@ public:
 private:
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
+	Mix_Music* Music;
 
 
 	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES], Menu;
