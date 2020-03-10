@@ -45,7 +45,6 @@ bool Game::Init()
 	idx_enemies = 0;
 	Music = Mix_LoadMUS("Oushit.wav");
 	NukeSound = Mix_LoadWAV("Nuke.wav");
-
 	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	
 
@@ -171,7 +170,7 @@ bool Game::Update()
 		Player.SetPosition();
 
 		timeGameplay = contador/100;
-		cout << timeGameplay << endl;
+		//cout << timeGameplay << endl;
 
 		if (timeGameplay < 8) {
 
@@ -257,8 +256,10 @@ bool Game::Update()
 			nuke = rand() % 10;
 		}
 		if (nuke == 2) {
+			int x = rand() % WINDOW_WIDTH + 1;
+			int y = rand() & WINDOW_HEIGHT + 1;
 			boosterActive = true;
-			Nuke.Init(20, 50, 50, 50, 0);
+			Nuke.Init(x, y, 50, 50, 0);
 			nuke = 0;
 		}
 		
@@ -275,8 +276,9 @@ bool Game::Update()
 					Enemies[i].ShutDown();
 				}
 				Nuke.ShutDown();
-				Mix_PlayChannel(1, NukeSound, 1);
+				Mix_PlayChannel(1, NukeSound, 0);
 				boosterActive = false;
+				nukeAlpha = true;
 			}
 		}
 		
@@ -326,8 +328,11 @@ void Game::Draw()
 	//Clear rendering target
 	SDL_RenderClear(Renderer);
 	
+
 	//Draw player
 	SDL_Rect rc;
+
+	
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
 	//SDL_RenderDrawRect(Renderer, &rc);
@@ -339,12 +344,7 @@ void Game::Draw()
 		Menu.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 		SDL_RenderCopy(Renderer, img_menu, NULL, &rc);
 	}
-	//Draw Nuke
-	if (Nuke.IsAlive() && menu == false) {
-		
-		Nuke.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-		SDL_RenderCopy(Renderer, img_booster, NULL, &rc);
-	}
+	
 	//Draw enemies
 	//SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++)
@@ -378,8 +378,14 @@ void Game::Draw()
 		}
 	}
 
-	
+	//Draw Nuke
+	if (Nuke.IsAlive() && menu == false) {
 
+		Nuke.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+		SDL_RenderCopy(Renderer, img_booster, NULL, &rc);
+	}
+
+	
 	//Update screen
 	SDL_RenderPresent(Renderer);
 

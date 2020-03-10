@@ -52,6 +52,7 @@ private:
 	int pretimeGameplay;
 	int nuke;
 	bool boosterActive;
+	
 
 
 	SDL_Texture* img_player, * enemy_sprite[7], * img_menu, *img_booster;
