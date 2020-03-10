@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include <iostream>
-using namespace std;
 
+//Constructor and deconstructor
 Game::Game() {}
 Game::~Game() {}
 
@@ -15,18 +14,22 @@ bool Game::Init()
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
+
+	//We initialize the audio
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
 
 		SDL_Log("Unable to initialize: %s", SDL_GetError());
 		return false;
 	}
+
 	//Create our window: title, x, y, w, h, flags
-	Window = SDL_CreateWindow("Spaceship: arrow keys + space", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	Window = SDL_CreateWindow("Pigeon Apocalypse", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (Window == NULL)
 	{
 		SDL_Log("Unable to create window: %s", SDL_GetError());
 		return false;
 	}
+
 	//Create a 2D rendering context for a window: window, device index, flags
 	Renderer = SDL_CreateRenderer(Window, -1, 0);
 	if (Renderer == NULL)
@@ -34,6 +37,7 @@ bool Game::Init()
 		SDL_Log("Unable to create rendering context: %s", SDL_GetError());
 		return false;
 	}
+
 	//Initialize keys array
 	for (int i = 0; i < MAX_KEYS; ++i)
 		keys[i] = KEY_IDLE;
@@ -41,7 +45,6 @@ bool Game::Init()
 
 	//Init variables
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5); // estaba en 50,20
-	
 	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
 	//Init background image
@@ -52,20 +55,26 @@ bool Game::Init()
 
 	idx_shot = 0;
 	idx_enemies = 0;
+	contador = 0;
+	nuke = 0;
+	boosterActive = false;
+	bird = 0;
+	menu = true;
+
+	//Load music and sounds
 	Music = Mix_LoadMUS("Oushit.wav");
 	NukeSound = Mix_LoadWAV("Nuke.wav");
 	ShotSound = Mix_LoadWAV("Laser_Gun_Sound_Effect.wav");
 	
-
+	//Seed for "random" number generator
 	srand(time(NULL));
-	contador = 0;
-	nuke = 0;
-	boosterActive = false;
+	
 
 	//Init player image
 	IMG_Init(IMG_INIT_PNG);
 	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
 	img_shot = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Shot.png"));
+	
 	//Init pigeons image
 	
 	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.png"));
@@ -82,8 +91,7 @@ bool Game::Init()
 	//Init menu image
 	img_menu = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Menu.png"));
 
-	bird = 0;
-	menu = true;
+	
 	return true;
 }
 void Game::Release()
@@ -144,11 +152,8 @@ bool Game::Update()
 			Release();
 			return true;
 		}
-
 	}
 	else {
-
-	
 
 		//Process Input
 		int fx = 0, fy = 0;
@@ -175,7 +180,6 @@ bool Game::Update()
 
 
 		timeGameplay = contador/100;
-		//cout << timeGameplay << endl;
 
 		if (timeGameplay < 8) {
 
@@ -186,20 +190,7 @@ bool Game::Update()
 		{
 			difficulty = 10;
 		}
-		else if (difficulty == 2)
-		{
-			difficulty = 2;
-		}
-		else if (timeGameplay % 2 == 0) 
-		{
-			if (pretimeGameplay != timeGameplay)
-			{
-				difficulty -= 2;
-			}
-		}
-
-		pretimeGameplay = timeGameplay;
-
+	
 		contador++;
 
 		if (contador % difficulty == 0) //Dividimos los frames entre 5 y si el residuo nos da 0 es que es multiplo de 5, de esta manera esto ocurre cada 5 s.
@@ -208,7 +199,7 @@ bool Game::Update()
 			int pos_x = WINDOW_WIDTH - 20;
 			int pos_y = rand() % WINDOW_HEIGHT;
 			
-			if (timeGameplay > 18)
+			if (timeGameplay > 30)
 			{
 				Enemies[idx_enemies].Init(pos_x, pos_y, 30, 30, 2);
 			}
@@ -243,11 +234,13 @@ bool Game::Update()
 					//Release();
 					for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
 					{
+						Mix_HaltChannel(1);
 						Enemies[i].ShutDown();
 						
 						menu = true;
 						Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5);
 						contador = 0;
+						
 						
 	
 					}
@@ -259,7 +252,7 @@ bool Game::Update()
 		
 		//We generate the nuke!
 		if (boosterActive == false) { 
-			nuke = rand() % 10;
+			nuke = rand() % 500;
 		}
 		if (nuke == 2) {
 			int x = rand() % (WINDOW_WIDTH/2) + 1;
@@ -328,7 +321,6 @@ bool Game::Update()
 		}
 		
 	}
-
 
 	return false;
 }
@@ -400,5 +392,5 @@ void Game::Draw()
 	//Update screen
 	SDL_RenderPresent(Renderer);
 
-	SDL_Delay(10);	// 1000/10 = 100 fps max
+	SDL_Delay(10);	
 }
