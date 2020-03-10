@@ -49,7 +49,6 @@ bool Game::Init()
 	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	
 
-	
 	srand(time(NULL));
 	contador = 0;
 	nuke = 0;
