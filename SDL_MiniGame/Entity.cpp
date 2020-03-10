@@ -96,3 +96,4 @@ void Entity::Move(int dx, int dy)
 	x += dx * speed;
 	y += dy * speed;
 }
+

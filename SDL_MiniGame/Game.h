@@ -28,14 +28,18 @@ public:
 	bool Update();
 	void Draw();
 	
+	
+	
+	
 
 private:
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
 	Mix_Music* Music;
+	Mix_Chunk* NukeSound;
 
 
-	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES], Menu;
+	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES], Menu, Nuke;
 
 	
 	int idx_shot;
@@ -46,9 +50,11 @@ private:
 	int difficulty;
 	int timeGameplay;
 	int pretimeGameplay;
+	int nuke;
+	bool boosterActive;
 
 
-	SDL_Texture* img_player, * enemy_sprite[7], * img_menu;
+	SDL_Texture* img_player, * enemy_sprite[7], * img_menu, *img_booster;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];

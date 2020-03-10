@@ -16,6 +16,8 @@ public:
 	bool IsAlive();
 	void Move(int dx, int dy);
 
+	
+
 private:
 	int x, y;
 	int width, height;

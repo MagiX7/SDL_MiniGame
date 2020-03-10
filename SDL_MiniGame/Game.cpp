@@ -44,12 +44,16 @@ bool Game::Init()
 	idx_shot = 0;
 	idx_enemies = 0;
 	Music = Mix_LoadMUS("Oushit.wav");
+	NukeSound = Mix_LoadWAV("Nuke.wav");
 
 	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+	
 
 	
 	srand(time(NULL));
 	contador = 0;
+	nuke = 0;
+	boosterActive = false;
 
 	IMG_Init(IMG_INIT_PNG);
 	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
@@ -61,7 +65,7 @@ bool Game::Init()
 	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.jpg"));
 	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.jpg"));
 	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.jpg"));
-
+	img_booster = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Nuke.png"));
 	img_menu = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Menu.png"));
 
 	bird = 0;
@@ -76,7 +80,7 @@ void Game::Release()
 		SDL_DestroyTexture(enemy_sprite[i]);
 	}
 	SDL_DestroyTexture(img_player);
-	Mix_FreeMusic(Music);
+	//Mix_FreeMusic(Music);
 	SDL_Quit();
 }
 bool Game::Input()
@@ -247,6 +251,35 @@ bool Game::Update()
 				}
 			}
 		}
+	
+		
+		//We generate the nuke!
+		if (boosterActive == false) { 
+			nuke = rand() % 10;
+		}
+		if (nuke == 2) {
+			boosterActive = true;
+			Nuke.Init(20, 50, 50, 50, 0);
+			nuke = 0;
+		}
+		
+		if (boosterActive == true) {
+						
+			int x, y, w, h;
+			int x_2, y_2, w_2, h_2;
+			Player.GetRect(&x, &y, &w, &h);
+			Nuke.GetRect(&x_2, &y_2, &w_2, &h_2);
+
+			if (Player.Touching(x, y, w, h, x_2, y_2, w_2, h_2) == true) {
+				for (int i = 0; i < AMOUNT_OF_ENEMIES; ++i)
+				{
+					Enemies[i].ShutDown();
+				}
+				Nuke.ShutDown();
+				boosterActive = false;
+			}
+		}
+		
 
 		//Hitboxes
 		for (int i = 0; i < MAX_SHOTS; i++)
@@ -306,9 +339,14 @@ void Game::Draw()
 		Menu.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 		SDL_RenderCopy(Renderer, img_menu, NULL, &rc);
 	}
-
+	//Draw Nuke
+	if (Nuke.IsAlive()) {
+		
+		Nuke.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+		SDL_RenderCopy(Renderer, img_booster, NULL, &rc);
+	}
 	//Draw enemies
-	SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
+	//SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++)
 	{
 		if (Enemies[i].IsAlive())
@@ -340,7 +378,7 @@ void Game::Draw()
 		}
 	}
 
-
+	
 
 	//Update screen
 	SDL_RenderPresent(Renderer);
