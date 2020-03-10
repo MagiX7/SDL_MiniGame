@@ -257,8 +257,8 @@ bool Game::Update()
 			nuke = rand() % 10;
 		}
 		if (nuke == 2) {
-			int x = rand() % WINDOW_WIDTH + 1;
-			int y = rand() & WINDOW_HEIGHT + 1;
+			int x = rand() % (WINDOW_WIDTH/2) + 1;
+			int y = rand() % WINDOW_HEIGHT - 5;
 			boosterActive = true;
 			Nuke.Init(x, y, 50, 50, 0);
 			nuke = 0;
