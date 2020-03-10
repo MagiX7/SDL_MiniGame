@@ -27,10 +27,6 @@ public:
 	bool Input();
 	bool Update();
 	void Draw();
-	
-	
-	
-	
 
 private:
 	SDL_Window* Window;
@@ -55,7 +51,7 @@ private:
 	bool nukeAlpha;
 	
 
-	SDL_Texture* img_player, * enemy_sprite[7], * img_menu, *img_booster, *img_background;
+	SDL_Texture* img_player, * enemy_sprite[7], * img_menu, *img_booster, *img_background, *img_shot;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
 	KEY_STATE keys[MAX_KEYS];

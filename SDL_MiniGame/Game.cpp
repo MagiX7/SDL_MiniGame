@@ -64,7 +64,7 @@ bool Game::Init()
 	//Init player image
 	IMG_Init(IMG_INIT_PNG);
 	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
-	
+	img_shot = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Shot.png"));
 	//Init pigeons image
 	
 	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.png"));
@@ -96,6 +96,7 @@ void Game::Release()
 	SDL_DestroyTexture(img_player);
 	SDL_DestroyTexture(img_booster);
 	SDL_DestroyTexture(img_menu);
+	SDL_DestroyTexture(img_shot);
 	//Mix_FreeMusic(Music);
 	SDL_Quit();
 }
@@ -378,7 +379,7 @@ void Game::Draw()
 		if (Shots[i].IsAlive())
 		{
 			Shots[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, img_shot, NULL, &rc);
 		}
 	}
 
