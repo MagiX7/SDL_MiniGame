@@ -23,5 +23,7 @@ picked up, so you can save it for a dangerous moment.
 
 ===========================================================================================================================================
 
+GITHUB
+
 For more information about our next game, "PANG" you can go check our GitHub page and watch our progress at: https://github.com/UriKurae/Game_Project
 
