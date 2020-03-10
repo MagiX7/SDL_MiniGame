@@ -40,6 +40,7 @@ bool Game::Init()
 
 
 	//Init variables
+	Background.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5); // estaba en 50,20
 	idx_shot = 0;
 	idx_enemies = 0;
@@ -78,6 +79,7 @@ void Game::Release()
 	{
 		SDL_DestroyTexture(enemy_sprite[i]);
 	}
+	SDL_DestroyTexture(img_background);
 	SDL_DestroyTexture(img_player);
 	//Mix_FreeMusic(Music);
 	SDL_Quit();
@@ -169,6 +171,13 @@ bool Game::Update()
 
 		Player.Move(fx, fy);
 		Player.SetPosition();
+
+		//Background scroll
+
+		Background.Move(-1, 0);
+		if (Background.GetX() <= -Background.GetWidth()) {
+			Background.SetX(0);
+		}
 
 		timeGameplay = contador/100;
 		//cout << timeGameplay << endl;
@@ -319,6 +328,7 @@ bool Game::Update()
 	
 
 	}
+
 	return false;
 }
 
@@ -329,17 +339,21 @@ void Game::Draw()
 	//Clear rendering target
 	SDL_RenderClear(Renderer);
 	
+	//Draw background
+	SDL_Rect rc;
+	Background.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	SDL_RenderCopy(Renderer, img_background, NULL, &rc);
+	rc.x += rc.w;
+	SDL_RenderCopy(Renderer, img_background, NULL, &rc);
 
 	//Draw player
-	SDL_Rect rc;
-
 	
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
 	//SDL_RenderDrawRect(Renderer, &rc);
 	//SDL_RenderFillRect(Renderer, &rc);
 	SDL_RenderCopy(Renderer, img_player, NULL, &rc);
-
+	
 	//Draw menu
 	if (menu == true) {
 		Menu.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);

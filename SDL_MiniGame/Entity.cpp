@@ -97,3 +97,12 @@ void Entity::Move(int dx, int dy)
 	y += dy * speed;
 }
 
+int Entity::GetWidth() {
+	return width;
+}
+
+int Entity::SetX(int posx) {
+	x = posx;
+
+	return x;
+}

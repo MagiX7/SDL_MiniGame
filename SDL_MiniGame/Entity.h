@@ -15,9 +15,9 @@ public:
 	void ShutDown();
 	bool IsAlive();
 	void Move(int dx, int dy);
-
+	int GetWidth();
+	int SetX(int posx);
 	
-
 private:
 	int x, y;
 	int width, height;

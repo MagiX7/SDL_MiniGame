@@ -39,7 +39,7 @@ private:
 	Mix_Chunk* NukeSound;
 
 
-	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES], Menu, Nuke;
+	Entity Player, Shots[MAX_SHOTS], Enemies[AMOUNT_OF_ENEMIES], Menu, Nuke, Background;
 
 	
 	int idx_shot;
