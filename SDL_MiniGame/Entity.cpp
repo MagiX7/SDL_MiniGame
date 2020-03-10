@@ -103,6 +103,5 @@ int Entity::GetWidth() {
 
 int Entity::SetX(int posx) {
 	x = posx;
-
 	return x;
 }

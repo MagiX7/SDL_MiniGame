@@ -40,13 +40,20 @@ bool Game::Init()
 
 
 	//Init variables
-	Background.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	Player.Init(20, WINDOW_HEIGHT >> 1, 50, 50, 5); // estaba en 50,20
+	
+	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+
+	//Init background image
+	img_background = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Background.png"));
+	int w;
+	SDL_QueryTexture(img_background, NULL, NULL, &w, NULL);
+	Background.Init(0, 0, w, WINDOW_HEIGHT, 4);
+
 	idx_shot = 0;
 	idx_enemies = 0;
 	Music = Mix_LoadMUS("Oushit.wav");
 	NukeSound = Mix_LoadWAV("Nuke.wav");
-	Menu.Init(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	
 
 	srand(time(NULL));
@@ -54,9 +61,11 @@ bool Game::Init()
 	nuke = 0;
 	boosterActive = false;
 
+	//Init player image
 	IMG_Init(IMG_INIT_PNG);
 	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
-	img_background = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Background.png"));
+	
+	//Init pigeons image
 	IMG_Init(IMG_INIT_JPG);
 	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.jpg"));
 	enemy_sprite[1] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 1.jpg"));
@@ -65,7 +74,11 @@ bool Game::Init()
 	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.jpg"));
 	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.jpg"));
 	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.jpg"));
+	
+	//Init booster image
 	img_booster = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Nuke.png"));
+	
+	//Init menu image
 	img_menu = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Menu.png"));
 
 	bird = 0;
@@ -81,6 +94,8 @@ void Game::Release()
 	}
 	SDL_DestroyTexture(img_background);
 	SDL_DestroyTexture(img_player);
+	SDL_DestroyTexture(img_booster);
+	SDL_DestroyTexture(img_menu);
 	//Mix_FreeMusic(Music);
 	SDL_Quit();
 }
@@ -132,25 +147,6 @@ bool Game::Update()
 
 	
 
-	//Process Input
-	int fx = 0, fy = 0;
-	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
-	if (keys[SDL_SCANCODE_W] == KEY_REPEAT)	fy = -1;
-	if (keys[SDL_SCANCODE_S] == KEY_REPEAT)	fy = 1;
-	if (keys[SDL_SCANCODE_A] == KEY_REPEAT)	fx = -1;
-	if (keys[SDL_SCANCODE_D] == KEY_REPEAT)	fx = 1;
-	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
-	{
-		int x, y, w, h;
-		Player.GetRect(&x, &y, &w, &h);
-		Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 20, 10, 10);
-		idx_shot++;
-		idx_shot %= MAX_SHOTS;
-	}
-	else {
-
-
-
 		//Process Input
 		int fx = 0, fy = 0;
 		if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
@@ -166,18 +162,12 @@ bool Game::Update()
 			idx_shot++;
 			idx_shot %= MAX_SHOTS;
 		}
-
+	
 		//Player update
 
 		Player.Move(fx, fy);
 		Player.SetPosition();
 
-		//Background scroll
-
-		Background.Move(-1, 0);
-		if (Background.GetX() <= -Background.GetWidth()) {
-			Background.SetX(0);
-		}
 
 		timeGameplay = contador/100;
 		//cout << timeGameplay << endl;
@@ -322,36 +312,38 @@ bool Game::Update()
 			}
 		}
 
+		//Background scroll
 
-
+		Background.Move(-1, 0);
+		if (Background.GetX() <= -Background.GetWidth())
+		{
+			Background.SetX(0);
+		}
+		
 	}
-	
 
-	}
 
 	return false;
 }
 
 void Game::Draw()
 {
+	SDL_Rect rc;
 	//Set the color used for drawing operations
 	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
+
 	//Clear rendering target
 	SDL_RenderClear(Renderer);
 	
-	//Draw background
-	SDL_Rect rc;
+	//Draw background scroll
 	Background.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, img_background, NULL, &rc);
 	rc.x += rc.w;
 	SDL_RenderCopy(Renderer, img_background, NULL, &rc);
 
 	//Draw player
-	
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
-	//SDL_RenderDrawRect(Renderer, &rc);
-	//SDL_RenderFillRect(Renderer, &rc);
 	SDL_RenderCopy(Renderer, img_player, NULL, &rc);
 	
 	//Draw menu
@@ -361,14 +353,11 @@ void Game::Draw()
 	}
 	
 	//Draw enemies
-	//SDL_SetRenderDrawColor(Renderer, 0, 255, 0, 255);
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++)
 	{
 		if (Enemies[i].IsAlive())
 		{
 			Enemies[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			//SDL_RenderDrawRect(Renderer, &rc);
-			//SDL_RenderFillRect(Renderer, &rc);
 			SDL_RenderCopy(Renderer, enemy_sprite[bird], NULL, &rc);
 			if (contador % 10 == 0)
 			{

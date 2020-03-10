@@ -55,7 +55,6 @@ private:
 	bool nukeAlpha;
 	
 
-
 	SDL_Texture* img_player, * enemy_sprite[7], * img_menu, *img_booster, *img_background;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP };
