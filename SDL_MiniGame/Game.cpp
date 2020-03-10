@@ -66,14 +66,14 @@ bool Game::Init()
 	img_player = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Star Fighter sprite.png"));
 	
 	//Init pigeons image
-	IMG_Init(IMG_INIT_JPG);
-	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.jpg"));
-	enemy_sprite[1] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 1.jpg"));
-	enemy_sprite[2] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 2.jpg"));
-	enemy_sprite[3] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 3.jpg"));
-	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.jpg"));
-	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.jpg"));
-	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.jpg"));
+	
+	enemy_sprite[0] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 0.png"));
+	enemy_sprite[1] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 1.png"));
+	enemy_sprite[2] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 2.png"));
+	enemy_sprite[3] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 3.png"));
+	enemy_sprite[4] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 4.png"));
+	enemy_sprite[5] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 5.png"));
+	enemy_sprite[6] = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Pigeon Sprite 6.png"));
 	
 	//Init booster image
 	img_booster = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Nuke.png"));
